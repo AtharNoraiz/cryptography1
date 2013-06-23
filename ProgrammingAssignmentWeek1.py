@@ -4,7 +4,7 @@ def strxor(a, b):     # xor two strings of different lengths
   else:
     return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a, b[:len(a)])])
 
-hex_cypher_texts = [
+hex_cipher_texts = [
   "315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146fb778cdf2d3aff021dfff5b403b510d0d0455468aeb98622b137dae857553ccd8883a7bc37520e06e515d22c954eba5025b8cc57ee59418ce7dc6bc41556bdb36bbca3e8774301fbcaa3b83b220809560987815f65286764703de0f3d524400a19b159610b11ef3e",
   "234c02ecbbfbafa3ed18510abd11fa724fcda2018a1a8342cf064bbde548b12b07df44ba7191d9606ef4081ffde5ad46a5069d9f7f543bedb9c861bf29c7e205132eda9382b0bc2c5c4b45f919cf3a9f1cb74151f6d551f4480c82b2cb24cc5b028aa76eb7b4ab24171ab3cdadb8356f",
   "32510ba9a7b2bba9b8005d43a304b5714cc0bb0c8a34884dd91304b8ad40b62b07df44ba6e9d8a2368e51d04e0e7b207b70b9b8261112bacb6c866a232dfe257527dc29398f5f3251a0d47e503c66e935de81230b59b7afb5f41afa8d661cb",
@@ -16,16 +16,16 @@ hex_cypher_texts = [
   "271946f9bbb2aeadec111841a81abc300ecaa01bd8069d5cc91005e9fe4aad6e04d513e96d99de2569bc5e50eeeca709b50a8a987f4264edb6896fb537d0a716132ddc938fb0f836480e06ed0fcd6e9759f40462f9cf57f4564186a2c1778f1543efa270bda5e933421cbe88a4a52222190f471e9bd15f652b653b7071aec59a2705081ffe72651d08f822c9ed6d76e48b63ab15d0208573a7eef027",
   "466d06ece998b7a2fb1d464fed2ced7641ddaa3cc31c9941cf110abbf409ed39598005b3399ccfafb61d0315fca0a314be138a9f32503bedac8067f03adbf3575c3b8edc9ba7f537530541ab0f9f3cd04ff50d66f1d559ba520e89a2cb2a83"
 ]
-cypher_texts = [h.decode("hex") for h in hex_cypher_texts]
+cipher_texts = [h.decode("hex") for h in hex_cipher_texts]
 target = "32510ba9babebbbefd001547a810e67149caee11d945cd7fc81a05e9f85aac650e9052ba6a8cd8257bf14d13e6f0a803b54fde9e77472dbff89d71b57bddef121336cb85ccb8f3315f4b52e301d16e9f52f904".decode("hex")
-texts = [["_"]*len(c) for c in cypher_texts]
-min_len = min([len(t) for t in cypher_texts])
+texts = [["_"]*len(c) for c in cipher_texts]
+min_len = min([len(t) for t in cipher_texts])
 
-for i in xrange(len(cypher_texts)):
+for i in xrange(len(cipher_texts)):
   res = {}
-  for m in xrange(len(cypher_texts)):
+  for m in xrange(len(cipher_texts)):
     if m != i:
-      res[strxor(cypher_texts[i], cypher_texts[m])[:min_len]] = m
+      res[strxor(cipher_texts[i], cipher_texts[m])[:min_len]] = m
   for c in xrange(min_len):
     all_caps = True
     for r in res:
@@ -38,11 +38,11 @@ for i in xrange(len(cypher_texts)):
       texts[i][c] = " "
 
 def update(i, text):
-  key = strxor(text, cypher_texts[i])
+  key = strxor(text, cipher_texts[i])
   for i1 in xrange(len(texts)):
     for i2 in xrange(len(text)):
       if text[i2] != "_":
-        texts[i1][i2] = strxor(cypher_texts[i1][i2], key[i2])
+        texts[i1][i2] = strxor(cipher_texts[i1][i2], key[i2])
 
 # after printing the texts - we can take some guesses on the messages
 update(0, "___ca_ factor the number __ wi_______tu__computers_ _e_c_n also factor the number___ with _____")
@@ -54,5 +54,5 @@ update(2, "the nice thing about Keeyloq i_______e cryptographers can drive a lot
 update(0, "we can factor the number 15 with quantum computers. We can also factor the number 15 with a dog")
 messages = ["".join(t) for t in texts]
 
-key = strxor(messages[0], cypher_texts[0])
+key = strxor(messages[0], cipher_texts[0])
 print strxor(key, target)
